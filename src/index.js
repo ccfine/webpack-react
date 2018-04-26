@@ -18,7 +18,7 @@ render(App);
 
 if (module.hot) {
   module.hot.accept("./App.jsx", () => {
-    const NextApp = require("./App.jsx").default;
+    const NextApp = require("./App.jsx").default;  //eslint-disable-line
     render(NextApp);
   });
 }

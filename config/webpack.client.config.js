@@ -1,26 +1,17 @@
 const path = require("path");
 const webpack = require("webpack");
+const webpackMerge = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const commonConfig = require("./webpack.common.config.js");
 
 const isDev = process.env.NODE_ENV === "development";
 
-const config = {
+const config = webpackMerge(commonConfig, {
   entry: {
     index: path.join(__dirname, "../src/index.js")
   },
   output: {
-    path: path.join(__dirname, "../dist"),
-    publicPath: "/public/",
     filename: "[name].[hash].js"
-  },
-  module: {
-    rules: [
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: "babel-loader",
-        include: path.join(__dirname, "../src")
-      }
-    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -28,7 +19,7 @@ const config = {
       template: path.join(__dirname, "../src/index.html")
     })
   ]
-};
+});
 
 if (isDev) {
   config.entry = {
@@ -38,8 +29,8 @@ if (isDev) {
     ]
   }
   config.devServer = {
-    host: "0.0.0.0",
-    port: "8080",
+    host: "localhost",
+    port: "3000",
     contentBase: path.join(__dirname, "../dist"),
     hot: true,
     overlay: {
@@ -48,7 +39,9 @@ if (isDev) {
     publicPath: "/public",
     historyApiFallback: {
       index: "/public/index.html"
-    }
+    },
+    inline: true,
+    open: true
   };
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
 }
