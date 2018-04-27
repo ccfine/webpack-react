@@ -21,6 +21,8 @@ if (!isDev) {
   devStatic(app);
 }
 
-app.listen(9000, () => {
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.PORT || 9000
+app.listen(port, host, () => {
   console.log("server is run on 9000");
 });

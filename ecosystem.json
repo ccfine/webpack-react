@@ -1,0 +1,22 @@
+{
+  "apps": [
+    {
+      "script": "./server/server.js",
+      "name": "ccfine",
+      "env_production": {
+        "NODE_ENV": "production",
+        "HOST": "localhost"
+      }
+    }
+  ],
+  "deploy": {
+    "produciton": {
+      "user": "",
+      "host": "",
+      "repo": "git",
+      "ref": "",
+      "path": "",
+      "post-deploy": "npm install && npm run deploy && pm2 startOrRestart ecosystem.json --env production"
+    }
+  }
+}

@@ -3,11 +3,11 @@ const webpack = require("webpack")
 const webpackMerge = require("webpack-merge")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const NameAllModulesPlugin = require("name-all-modules-plugin")
-const commonConfig = require("./webpack.common.config.js")
+const baseConfig = require("./webpack.base.config.js")
 
 const isDev = process.env.NODE_ENV === "development"
 
-const config = webpackMerge(commonConfig, {
+const config = webpackMerge(baseConfig, {
   entry: {
     index: path.join(__dirname, "../src/index.js")
   },

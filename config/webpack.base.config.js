@@ -20,6 +20,13 @@ module.exports = {
         test: /(\.jsx|\.js)$/,
         loader: "babel-loader",
         include: path.join(__dirname, "../src")
+      },
+      {
+        test: /(\.png|\.jpg|\.gif|\.svg)$/,
+        loader: "file-loader",
+        options: {
+          name: "[name].[ext]?[hash]"
+        }
       }
     ]
   }
