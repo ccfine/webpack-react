@@ -1,10 +1,11 @@
-const path = require("path");
-const webpack = require("webpack");
-const webpackMerge = require("webpack-merge");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const commonConfig = require("./webpack.common.config.js");
+const path = require("path")
+const webpack = require("webpack")
+const webpackMerge = require("webpack-merge")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const NameAllModulesPlugin = require("name-all-modules-plugin")
+const commonConfig = require("./webpack.common.config.js")
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "development"
 
 const config = webpackMerge(commonConfig, {
   entry: {
@@ -19,7 +20,7 @@ const config = webpackMerge(commonConfig, {
       template: path.join(__dirname, "../src/index.html")
     })
   ]
-});
+})
 
 if (isDev) {
   config.entry = {
@@ -42,8 +43,37 @@ if (isDev) {
     },
     inline: true,
     open: true
-  };
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+  }
+  config.plugins.push(new webpack.HotModuleReplacementPlugin())
+} else {
+  config.entry = {
+    index: path.join(__dirname, "../src/index.js"),
+    vendor: [ "react", "react-dom", "react-router-dom", "redux", "react-redux", "react-thunk", "axios" ]
+  }
+  config.output.filename = "[name].[chunkhash].js"
+  config.plugins.push(
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "vendor"
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "manifest",
+      minChunks: Infinity
+    }),
+    new webpack.NamedModulesPlugin(),
+    new NameAllModulesPlugin(),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
+      }
+    }),
+    new webpack.NamedChunksPlugin(chunk => {
+      if (chunk.name) {
+        return chunk.name
+      }
+      return chunk.mapModules(m => path.relative(m.context, m.request)).join("_")
+    })
+  )
 }
 
-module.exports = config;
+module.exports = config
