@@ -42,7 +42,8 @@ if (isDev) {
       index: "/public/index.html"
     },
     inline: true,
-    open: true
+    open: true,
+    proxy: "http://localhost:9000"
   }
   config.plugins.push(new webpack.HotModuleReplacementPlugin())
 } else {

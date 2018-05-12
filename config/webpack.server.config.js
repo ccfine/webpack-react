@@ -6,6 +6,7 @@ const baseConfig = require("./webpack.base.config.js")
 module.exports = webpackMerge(baseConfig, {
   target: "node",
   entry: path.join(__dirname, "../src/server.entry.js"),
+  externals: Object.keys(require("../package.json").dependencies),
   output: {
     filename: "server.entry.js",
     libraryTarget: "commonjs2"
